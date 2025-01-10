@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Image, ImageBackground, StyleSheet, Switch, Text, View } from "react-native";
 import { Card } from "react-native-paper";
-import { SettingsIcon , MoonStar} from 'lucide-react-native';
+import { SettingsIcon , MoonStar,Sun} from 'lucide-react-native';
 import { useThemeStore } from '../../stores/themeStore';
 
 
@@ -33,10 +33,16 @@ const Settings = () => {
          <Card style={styles.card}>
             <Card.Content style={styles.cardContent}>
             <View style={styles.labelContainer}>
-               <View style={styles.themeIconContainer}>
-               <MoonStar size={20} color="#fff" style={styles.themeIcon} />
+               <View style={[styles.themeIconContainer,isDarkMode && styles.themeIconContainerLight]}>
+                  {
+                     isDarkMode ?
+                     <Sun size={20} color="#000"  />
+                     :
+                     <MoonStar size={20} color="#fff"  />
+                  }
+              
                </View>
-              <Text style={styles.label}>Dark mode</Text>
+              <Text style={styles.label}>{isDarkMode ? "Light mode" : "Dark mode"}</Text>
             </View>
             <Switch
             value={isDarkMode}
@@ -116,10 +122,14 @@ const styles = StyleSheet.create({
       padding: 5,
       borderRadius: 10,
    },
-   themeIcon:{
-      
-     
+   themeIconContainerLight:{
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      backgroundColor: 'yellow',
+      padding: 5,
+      borderRadius: 10,
    },
+  
    account:{
       paddingLeft: 5,
       fontSize: 18,
@@ -139,7 +149,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
    },
    dark: {
-      backgroundColor: '#000',
+      backgroundColor: '#1c1c1b',
       color: '#fff',
     },
     light: {
