@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Image, ImageBackground, StyleSheet, Switch, Text, View } from "react-native";
 import { Card } from "react-native-paper";
-import { SettingsIcon } from 'lucide-react-native';
+import { SettingsIcon , MoonStar} from 'lucide-react-native';
 import { useThemeStore } from '../../stores/themeStore';
 
 
@@ -26,14 +26,18 @@ const Settings = () => {
       </ImageBackground>
          </View>
          <View style={styles.secondSection}>
-            <SettingsIcon size={20} color="#000" style={styles.icon} />
-            <Text style={styles.account}>System Settings</Text>
+            <SettingsIcon size={20} color={isDarkMode? "#fff":"#000"} style={styles.icon} />
+            <Text style={isDarkMode ? styles.accountDark : styles.account}>System Settings</Text>
          </View>
          <View/>
          <Card style={styles.card}>
             <Card.Content style={styles.cardContent}>
-
-            <Text style={styles.label}>Change theme</Text>
+            <View style={styles.labelContainer}>
+               <View style={styles.themeIconContainer}>
+               <MoonStar size={20} color="#fff" style={styles.themeIcon} />
+               </View>
+              <Text style={styles.label}>Dark mode</Text>
+            </View>
             <Switch
             value={isDarkMode}
             onValueChange={toggleDarkMode}
@@ -66,6 +70,10 @@ const styles = StyleSheet.create({
       borderRadius: 100,
       
    },
+   labelContainer:{
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+   },
    secondSection:{
       flexDirection: 'row',
       padding: 10,
@@ -92,19 +100,37 @@ const styles = StyleSheet.create({
    },
    label:{
       padding: 3,
+      paddingLeft: 10,
       fontSize: 16,
       fontWeight: '400',
       color: '#333',
    },
    icon:{
-     marginTop: 2,
+     marginTop: 3,
 
+   },
+   themeIconContainer:{
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      backgroundColor: 'blue',
+      padding: 5,
+      borderRadius: 10,
+   },
+   themeIcon:{
+      
+     
    },
    account:{
       paddingLeft: 5,
       fontSize: 18,
       fontWeight: '500',
       color: '#333',
+   },
+   accountDark:{
+      paddingLeft: 5,
+      fontSize: 18,
+      fontWeight: '500',
+      color: '#fff',
    },
    card:{
       margin: 10,
