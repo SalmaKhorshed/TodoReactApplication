@@ -1,13 +1,15 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
+import { Image, ImageBackground, StyleSheet, Switch, Text, View } from "react-native";
 import { Card } from "react-native-paper";
 import { SettingsIcon } from 'lucide-react-native';
+import { useThemeStore } from '../../stores/themeStore';
 
 
 const Settings = () => {
+   const { isDarkMode, toggleDarkMode} = useThemeStore();
    return (
      
-      <View style={styles.content}>
+      <View style={[styles.container, isDarkMode ? styles.dark : styles.light]}>
          <View style={styles.imageBackgroundWrapper}>
          <ImageBackground
          style={styles.back}
@@ -23,21 +25,23 @@ const Settings = () => {
 
       </ImageBackground>
          </View>
-         
-         
-         
          <View style={styles.secondSection}>
             <SettingsIcon size={20} color="#000" style={styles.icon} />
             <Text style={styles.account}>System Settings</Text>
          </View>
          <View/>
          <Card style={styles.card}>
-            <Card.Content>
-               <Text>Card title</Text>
+            <Card.Content style={styles.cardContent}>
+
+            <Text style={styles.label}>Change theme</Text>
+            <Switch
+            value={isDarkMode}
+            onValueChange={toggleDarkMode}
+            thumbColor={isDarkMode ? '#fff' : '#000'}
+            />
             </Card.Content>
         </Card>
-        
-         
+
       </View>
    );
 };
@@ -66,6 +70,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       padding: 10,
    },
+  
    avatar: {
       height: 70,
       width: 70,
@@ -78,6 +83,17 @@ const styles = StyleSheet.create({
       paddingTop: 20,
       fontSize: 18,
       fontWeight: '500',
+      color: '#333',
+   },
+   cardContent:{
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+
+   },
+   label:{
+      padding: 3,
+      fontSize: 16,
+      fontWeight: '400',
       color: '#333',
    },
    icon:{
@@ -96,6 +112,14 @@ const styles = StyleSheet.create({
       height: 60,
       backgroundColor: '#fff',
    },
+   dark: {
+      backgroundColor: '#000',
+      color: '#fff',
+    },
+    light: {
+      backgroundColor: '#fff',
+      color: '#000',
+    },
    
 });
 export default Settings;
