@@ -6,7 +6,7 @@ import { Chip } from 'react-native-paper';
 const user = {
    name: 'Salma Ahmed',
    role: 'Front end developer at noon',
-   about: 'I am a fresh graduate from faculty of engineering, Cairo university. I graduated with an excellent grade. I have a strong passion for web development and I am always eager to learn new technologies.',
+   about: 'I am a fresh graduate from faculty of engineering , Cairo university. I graduated with an excellent grade. I have a strong passion for web development and I am always eager to learn new technologies.',
 };
 
 const Profile = () => {
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
       margin: 20,
       marginBottom: 0,
       padding: 10,
-      width: '90%',
+      width: '94%',
    },
 });
 
