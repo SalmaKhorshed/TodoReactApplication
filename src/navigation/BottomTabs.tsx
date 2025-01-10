@@ -1,16 +1,20 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-const Tab = createBottomTabNavigator();
+
 import HomeScreen from '../screens/HomeScreen/Home';
-import Settings from '../screens/SettingsScreen/Settings'
+
+
 import Category from '../screens/CategoryScreen/Category';
 import Profile from '../screens/ProfileScreen/Profile';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
 import { House , Shapes,CircleUserRound,SettingsIcon} from 'lucide-react-native';
+import Settings from '../screens/SettingsScreen/Settings';
 
+const Tab = createBottomTabNavigator();
 
 
 const BottomTabs= () => {
+    
    return (
     <Tab.Navigator
       screenOptions={{
