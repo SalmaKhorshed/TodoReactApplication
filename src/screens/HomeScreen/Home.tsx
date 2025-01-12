@@ -1,13 +1,22 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/react-in-jsx-scope */
 import { useNavigation } from "@react-navigation/native";
 import { PlusIcon } from "lucide-react-native";
-import React from "react";
-import { Dimensions, Image, StyleSheet, Text, View,TextInput, TouchableOpacity } from "react-native";
+import React, { useEffect } from "react";
+import { Dimensions, Image, StyleSheet, Text, View,TextInput, TouchableOpacity, FlatList } from "react-native";
+import { useTodoStore } from "../../stores/todoStore";
+import { Card, Chip } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
 const HomeScreen = () => {
    const navigation = useNavigation();
+   const { todos, loadTodos } = useTodoStore();
+
+   useEffect(() => {
+      loadTodos();
+    }, []);
 
    const navigateToTodoForm = () => {
      navigation.navigate('TodoForm' as never);
@@ -41,6 +50,39 @@ const HomeScreen = () => {
                <PlusIcon size={25} color="#fff" />
             </TouchableOpacity>
          </View>
+         <View style={styles.container}>
+            {todos.length > 0 ? (
+                <FlatList
+                data={todos}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                   <Card style={styles.card}>
+                         <Card.Content style={styles.cardContent}>
+                         <Text style={styles.taskTitle}> {item.title}</Text>
+                         <View style={styles.chipView}>
+                           <Chip style={styles.chip}>{item.category}</Chip>
+                         </View>
+                        
+                         </Card.Content>
+                   </Card>
+                   
+                )}
+                />
+
+            ): (
+            <View style={styles.noDataContainer}>
+                <Image
+                  style={styles.noData}
+                  source={require('../../assets/images/nodata.jpg')}
+                  resizeMode="contain"
+               />
+               <Text style={styles.noTasks}>No tasks yet</Text>
+
+            </View>
+            )}
+           
+         </View>
+         
 
 
       </View>
@@ -69,6 +111,57 @@ const styles = StyleSheet.create({
       fontSize: 30,
       fontWeight: 'bold',
    },
+   cardContent:{
+      flexDirection: 'column',
+      padding: 10,
+      
+
+   },
+   chipView: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+   },
+   chip:{
+      marginTop:10,
+      borderWidth:2,
+
+   },
+   taskTitle:{
+      fontSize: 21,
+      fontWeight: 'semibold',
+      color: '#333',
+   },
+   taskCategory:{
+      paddingTop:10,
+      fontSize: 16,
+      fontWeight: 'semibold',
+      color: '#333',
+   },
+   label:{
+      padding: 3,
+      paddingLeft: 10,
+      fontSize: 16,
+      fontWeight: '400',
+      color: '#333',
+   },
+   card:{
+      margin: 15,
+    
+      backgroundColor: '#95f0eb',
+   },
+   noDataContainer: {
+      marginTop: 30,
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+   noTasks:{
+      marginLeft:40,
+      fontSize: 19,
+      fontWeight: '400',
+      color: '#000',
+   },
    contentHeader:{
       marginTop: 10,
       padding: 17,
@@ -94,10 +187,16 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
    },
    addTask:{
-      flex: 1,
       flexDirection: 'row',
-      marginTop: 10,
-      width: '95%',
+   },
+   noData:{
+      marginLeft: 40,
+      width:320,
+      height: 250,
+      opacity: 0.5,
+   },
+   container:{
+      width: '97%',
    },
    search:{
       width: '97%',
