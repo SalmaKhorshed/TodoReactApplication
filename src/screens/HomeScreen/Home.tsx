@@ -2,8 +2,8 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useNavigation } from "@react-navigation/native";
 import { PlusIcon } from "lucide-react-native";
-import React, { useEffect } from "react";
-import { Dimensions, Image, StyleSheet, Text, View,TextInput, TouchableOpacity, FlatList, ImageBackground, Pressable } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Dimensions, Image, StyleSheet, Text, View,TextInput, TouchableOpacity, FlatList, Pressable, ScrollView } from "react-native";
 import { useTodoStore } from "../../stores/todoStore";
 import { Card, Chip } from "react-native-paper";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -16,22 +16,29 @@ const HomeScreen = () => {
    type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'HomeScreen'>;
    const navigation = useNavigation<HomeScreenNavigationProp>();
    const { todos, loadTodos } = useTodoStore();
+   const [searchQuery, setSearchQuery] = useState("");
+   const [filteredTodos, setFilteredTodos] = useState(todos);
 
    useEffect(() => {
       loadTodos();
     }, []);
 
+    useEffect(() => {
+      if (searchQuery.trim() === '') {
+        setFilteredTodos(todos);
+      } else {
+        const lowercasedQuery = searchQuery.toLowerCase();
+        setFilteredTodos(todos.filter(todo => 
+          todo.title.toLowerCase().includes(lowercasedQuery)
+        ));
+      }
+    }, [searchQuery]);
+
    const navigateToTodoForm = () => {
      navigation.navigate('TodoForm' as never);
    };
    return (
-      <ImageBackground
-      blurRadius={2}
-         style={styles.container}
-         source={require('../../assets/images/formBackground.jpg')}
-         resizeMode="cover"
-      >
-      <View style={styles.view}>
+       <View style={styles.view}>
       <Image
          style={styles.backgroundImage}
          source={require('../../assets/images/background2.jpg')}
@@ -49,7 +56,9 @@ const HomeScreen = () => {
          <View style={styles.search}>
             <TextInput
             style={styles.input}
-            placeholder="search ..."
+            placeholder="search by task title ..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
 
          />
          </View>
@@ -60,9 +69,9 @@ const HomeScreen = () => {
             </TouchableOpacity>
          </View>
          <View style={styles.taskContainer}>
-            {todos.length > 0 ? (
+            {filteredTodos.length > 0 ? (
                 <FlatList
-                data={todos}
+                data={filteredTodos}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                   <Pressable onPress={() => navigation.navigate('TodoDetails', { id: item.id })}>
@@ -98,14 +107,14 @@ const HomeScreen = () => {
 
       </View>
    </View>
-   </ImageBackground>
+     
    );
 };
 
 const { width: screenWidth } = Dimensions.get('window');
 const styles = StyleSheet.create({
    container:{
-      flex:1,
+      flexGrow:1,
       
    },
    view: {
