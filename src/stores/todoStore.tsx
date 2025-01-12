@@ -6,7 +6,7 @@ export interface Todo {
     title: string;
     description: string;
     category: string;
-    date: string;
+    date: Date;
 }
 type TodoStore = {
     todos: Todo[];

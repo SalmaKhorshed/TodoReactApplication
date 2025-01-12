@@ -1,10 +1,17 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { useNavigation } from "@react-navigation/native";
 import { PlusIcon } from "lucide-react-native";
+import React from "react";
 import { Dimensions, Image, StyleSheet, Text, View,TextInput, TouchableOpacity } from "react-native";
 
 
 
 const HomeScreen = () => {
+   const navigation = useNavigation();
+
+   const navigateToTodoForm = () => {
+     navigation.navigate('TodoForm' as never);
+   };
    return (
       <View style={styles.view}>
       <Image
@@ -30,7 +37,7 @@ const HomeScreen = () => {
          </View>
          <View style={styles.addTask}>
             <Text style={styles.taskHeader}>Add a new task  </Text>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={navigateToTodoForm}>
                <PlusIcon size={25} color="#fff" />
             </TouchableOpacity>
          </View>
@@ -61,7 +68,6 @@ const styles = StyleSheet.create({
       color: '#fff',
       fontSize: 30,
       fontWeight: 'bold',
-
    },
    contentHeader:{
       marginTop: 10,
@@ -86,19 +92,15 @@ const styles = StyleSheet.create({
       color: '#fff',
       fontSize: 30,
       fontWeight: 'bold',
-
    },
    addTask:{
       flex: 1,
       flexDirection: 'row',
       marginTop: 10,
       width: '95%',
-      
-
    },
    search:{
       width: '97%',
-
    },
    button: {
       width: 40,
