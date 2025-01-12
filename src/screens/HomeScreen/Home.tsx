@@ -3,15 +3,18 @@
 import { useNavigation } from "@react-navigation/native";
 import { PlusIcon } from "lucide-react-native";
 import React, { useEffect } from "react";
-import { Dimensions, Image, StyleSheet, Text, View,TextInput, TouchableOpacity, FlatList } from "react-native";
+import { Dimensions, Image, StyleSheet, Text, View,TextInput, TouchableOpacity, FlatList, ImageBackground, Pressable } from "react-native";
 import { useTodoStore } from "../../stores/todoStore";
 import { Card, Chip } from "react-native-paper";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../../App";
+
 
 
 
 const HomeScreen = () => {
-   const navigation = useNavigation();
+   type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'HomeScreen'>;
+   const navigation = useNavigation<HomeScreenNavigationProp>();
    const { todos, loadTodos } = useTodoStore();
 
    useEffect(() => {
@@ -22,6 +25,12 @@ const HomeScreen = () => {
      navigation.navigate('TodoForm' as never);
    };
    return (
+      <ImageBackground
+      blurRadius={2}
+         style={styles.container}
+         source={require('../../assets/images/formBackground.jpg')}
+         resizeMode="cover"
+      >
       <View style={styles.view}>
       <Image
          style={styles.backgroundImage}
@@ -50,12 +59,13 @@ const HomeScreen = () => {
                <PlusIcon size={25} color="#fff" />
             </TouchableOpacity>
          </View>
-         <View style={styles.container}>
+         <View style={styles.taskContainer}>
             {todos.length > 0 ? (
                 <FlatList
                 data={todos}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
+                  <Pressable onPress={() => navigation.navigate('TodoDetails', { id: item.id })}>
                    <Card style={styles.card}>
                          <Card.Content style={styles.cardContent}>
                          <Text style={styles.taskTitle}> {item.title}</Text>
@@ -65,6 +75,7 @@ const HomeScreen = () => {
                         
                          </Card.Content>
                    </Card>
+                   </Pressable>
                    
                 )}
                 />
@@ -87,11 +98,16 @@ const HomeScreen = () => {
 
       </View>
    </View>
+   </ImageBackground>
    );
 };
 
 const { width: screenWidth } = Dimensions.get('window');
 const styles = StyleSheet.create({
+   container:{
+      flex:1,
+      
+   },
    view: {
       width: '100%',
       height: '100%',
@@ -123,7 +139,8 @@ const styles = StyleSheet.create({
    },
    chip:{
       marginTop:10,
-      borderWidth:2,
+      marginLeft:5,
+     
 
    },
    taskTitle:{
@@ -146,8 +163,11 @@ const styles = StyleSheet.create({
    },
    card:{
       margin: 15,
-    
-      backgroundColor: '#95f0eb',
+      borderColor: '#f542ce',
+      borderWidth: 2,
+      backgroundColor: '#fff',
+      borderStyle: 'dashed',
+
    },
    noDataContainer: {
       marginTop: 30,
@@ -195,7 +215,7 @@ const styles = StyleSheet.create({
       height: 250,
       opacity: 0.5,
    },
-   container:{
+   taskContainer:{
       width: '97%',
    },
    search:{
