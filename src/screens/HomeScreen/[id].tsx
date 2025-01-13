@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/react-in-jsx-scope */
 import { RouteProp, useNavigation, useRoute, } from "@react-navigation/native";
-import { ArrowLeft, Delete, Edit, Trash } from "lucide-react-native";
-import { Dimensions, Image, ImageBackground, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { Todo, useTodoStore } from "../../stores/todoStore";
+import { ArrowLeft, Edit, Trash } from "lucide-react-native";
+import { Alert, Dimensions, Image, ImageBackground, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Todo, useTodoStore  } from "../../stores/todoStore";
 import { useEffect, useState } from "react";
 import { RootStackParamList } from "../../../App";
 import DatePicker from "react-native-date-picker";
@@ -16,9 +16,14 @@ const TodoDetails = () => {
     const { id } = route.params;
     const navigation = useNavigation();
     const [todo, setTodo] = useState<Todo | null>(null);
-    const { todos, loadTodos,deleteTodo } = useTodoStore();
+    const { todos, loadTodos,deleteTodo, updateTodo } = useTodoStore();
     const [isEditMode, setIsEditMode] = useState(false);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [category, setCategory] = useState('');
+    const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
+    const [formattedDate, setFormattedDate] = useState('');
     
     const navigateTo = () => {
         navigation.navigate('HomeScreen' as never);
@@ -31,7 +36,19 @@ const TodoDetails = () => {
        useEffect(() => {
         const foundTodo = todos.find((todo) => todo.id === id);
         setTodo(foundTodo as Todo);
+        setCategory(foundTodo?.category as string);
+        setTitle(foundTodo?.title as string);
+        setDescription(foundTodo?.description as string);
+        const parsedDate = new Date(foundTodo?.date || new Date());
+        setDate(parsedDate);
+        setFormattedDate(parsedDate.toLocaleString() as string);
       }, [id]);
+      
+      const handleConfirm = (selectedDate: Date) => {
+        setShowPicker(false);
+        setDate(selectedDate);
+        setFormattedDate(selectedDate.toLocaleString());
+     };
 
       const data = [
         { label: 'Item 1', value: 'category1' },
@@ -46,6 +63,31 @@ const TodoDetails = () => {
       const handleDelete = () => {
         deleteTodo(id);
         navigation.navigate('HomeScreen' as never);
+      };
+      const handleCancel = () => {
+        if (todo) {
+          setTitle(todo.title);
+          setDescription(todo.description);
+          setCategory(todo.category);
+          setDate(todo.date);
+        }
+        setIsEditMode(false);
+      };
+      const handleSave = () => {
+        if (!title.trim() || !category.trim()) {
+            Alert.alert('Validation Error', 'Title and Category are required.');
+            return;
+          }
+        const updatedTodo = {
+            id,
+            title,
+            description,
+            category,
+            date,
+        };
+        updateTodo(updatedTodo.id, { title, description, category, date });
+        setTodo(updatedTodo);
+        setIsEditMode(false);
       };
 
 
@@ -73,7 +115,8 @@ const TodoDetails = () => {
                 <Text style={styles.nameLabel}>Task Title</Text>
                 <TextInput
                            style={styles.input}
-                           value={todo?.title}
+                           value={title}
+                           onChangeText={setTitle}
                            placeholder="Add task title ..."
                 />
                 <Text style={styles.nameLabel}>Task Due date</Text>
@@ -81,32 +124,32 @@ const TodoDetails = () => {
                            <TextInput
                               style={styles.input}
                               placeholder="Select task date ..."
-                              value={todo?.date.toLocaleString()}
+                              value={formattedDate}
                               editable={false}
                            />
-                        </Pressable>
-                        <DatePicker
+                </Pressable>
+                <DatePicker
                            modal
                            open={showPicker}
-                           date={ new Date()}
-                           
+                           date={date}
+                           onConfirm={handleConfirm}
                            onCancel={() => setShowPicker(false)}
                         />
                 <Text style={styles.nameLabel}>Task Category</Text>
                 <Dropdown
                                style={styles.input}
                                data={data}
-                              
                                maxHeight={150}
                                placeholder="Select category ..."
                                placeholderStyle={styles.placeholderStyle}
-                               value={todo?.category}
+                               value={category}
                                labelField="label"
                                 valueField="value"
                                 searchPlaceholder="Search..."
-                                onChange={(item) => {
-                                    
-                                }}
+                               onChange={item => {
+                                   setCategory(item.value);
+
+                               }}
                                
                                />
                 <Text style={styles.nameLabel}>Task Description</Text>
@@ -115,20 +158,17 @@ const TodoDetails = () => {
                            placeholder="Add task description ..."
                            multiline
                            numberOfLines={5}
-                           value={todo?.description}
-                           
+                           value={description}
+                           onChangeText={setDescription}
                         />
             <View style={styles.btns}>
-        
-        <TouchableOpacity style={styles.delete} >
-                           
-                            <Text style={styles.deleteText}>Cancel </Text>
-    </TouchableOpacity>
+            <TouchableOpacity style={styles.delete} onPress={handleCancel}  >
+                 <Text style={styles.deleteText}>Cancel </Text>
+            </TouchableOpacity>
 
-    <TouchableOpacity style={styles.edit} onPress={()=>setIsEditMode(true)} >
-                            
-                            <Text style={styles.deleteText}>Save </Text>
-    </TouchableOpacity>
+            <TouchableOpacity style={styles.edit} onPress={handleSave} >
+                <Text style={styles.deleteText}>Save </Text>
+            </TouchableOpacity>
 
 
         </View>
@@ -138,7 +178,7 @@ const TodoDetails = () => {
                 <Text style={styles.nameLabel}>Task Title</Text>
                 <Text style={styles.name}>{todo?.title}</Text>
                 <Text style={styles.nameLabel}>Task Due date</Text>
-                <Text style={styles.name}>{todo?.date.toLocaleString()}</Text>
+                <Text style={styles.name}>{formattedDate}</Text>
                 <Text style={styles.nameLabel}>Task Category</Text>
                 <Text style={styles.name}>{todo?.category}</Text>
                 <Text style={styles.nameLabel}>Task Description</Text>

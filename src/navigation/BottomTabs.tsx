@@ -16,6 +16,7 @@ const BottomTabs = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: styles.tabBar,
+        tabBarHideOnKeyboard: true,
       }}
     >
       <Tab.Screen

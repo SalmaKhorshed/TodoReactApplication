@@ -9,9 +9,6 @@ import { Card, Chip } from "react-native-paper";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../App";
 
-
-
-
 const HomeScreen = () => {
    type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'HomeScreen'>;
    const navigation = useNavigation<HomeScreenNavigationProp>();
@@ -32,7 +29,7 @@ const HomeScreen = () => {
           todo.title.toLowerCase().includes(lowercasedQuery)
         ));
       }
-    }, [searchQuery]);
+    }, [todos, searchQuery]);
 
    const navigateToTodoForm = () => {
      navigation.navigate('TodoForm' as never);
@@ -89,14 +86,14 @@ const HomeScreen = () => {
                 )}
                 />
 
-            ): (
+            ) : (
             <View style={styles.noDataContainer}>
                 <Image
                   style={styles.noData}
                   source={require('../../assets/images/nodata.jpg')}
                   resizeMode="contain"
                />
-               <Text style={styles.noTasks}>No tasks yet</Text>
+               <Text style={styles.noTasks}>No tasks found</Text>
 
             </View>
             )}
