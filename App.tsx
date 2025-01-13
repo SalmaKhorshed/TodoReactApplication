@@ -9,6 +9,7 @@ export type RootStackParamList = {
   HomeScreen: undefined; 
   TodoForm: undefined; 
   TodoDetails: { id: string };
+  Category: undefined;
 };
 const Stack = createStackNavigator<RootStackParamList>(); 
 function App() {
@@ -16,6 +17,7 @@ function App() {
     <NavigationContainer>
     <Stack.Navigator initialRouteName="HomeScreen">
       <Stack.Screen name="HomeScreen" component={BottomTabs} options={{ headerShown: false }} />
+      <Stack.Screen name="Category" component={BottomTabs} options={{ headerShown: false }} />
       <Stack.Screen name="TodoForm" component={TodoForm} options={{ headerShown: false}} />
       <Stack.Screen name="TodoDetails" component={TodoDetails} options={{ headerShown: false}} />
     </Stack.Navigator>

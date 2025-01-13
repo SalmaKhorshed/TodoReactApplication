@@ -3,7 +3,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { PlusIcon } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Image, StyleSheet, Text, View,TextInput, TouchableOpacity, FlatList, Pressable, ScrollView } from "react-native";
+import { Dimensions, Image, StyleSheet, Text, View,TextInput, TouchableOpacity, FlatList, Pressable} from "react-native";
 import { useTodoStore } from "../../stores/todoStore";
 import { Card, Chip } from "react-native-paper";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -170,9 +170,9 @@ const styles = StyleSheet.create({
    card:{
       margin: 15,
       borderColor: '#f542ce',
-      borderWidth: 2,
+      borderWidth: 1,
       backgroundColor: '#fff',
-      borderStyle: 'dashed',
+      
 
    },
    noDataContainer: {

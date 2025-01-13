@@ -43,7 +43,7 @@ const TodoDetails = () => {
         setDate(parsedDate);
         setFormattedDate(parsedDate.toLocaleString() as string);
       }, [id]);
-      
+
       const handleConfirm = (selectedDate: Date) => {
         setShowPicker(false);
         setDate(selectedDate);
@@ -69,7 +69,9 @@ const TodoDetails = () => {
           setTitle(todo.title);
           setDescription(todo.description);
           setCategory(todo.category);
-          setDate(todo.date);
+          const parsedDate = new Date(todo?.date || new Date());
+          setDate(parsedDate);
+          setFormattedDate(parsedDate.toLocaleString() as string);
         }
         setIsEditMode(false);
       };
