@@ -11,6 +11,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import CategoryForm from '../screens/CategoryScreen/CategoryForm';
 import { getFocusedRouteNameFromRoute, Route } from '@react-navigation/native';
 import CategoryEdit from '../screens/CategoryScreen/CategoryEdit';
+import CategoryTasks from '../screens/CategoryScreen/CategoryTasks';
 
 const Tab = createBottomTabNavigator();
 const CategoryStack = createStackNavigator();
@@ -22,6 +23,9 @@ const CategoryFlow = () => (
           headerShown: false,
         }} />
          <CategoryStack.Screen name="CategoryEdit" component={CategoryEdit} options={{
+          headerShown: false,
+        }} />
+         <CategoryStack.Screen name="CategoryTasks" component={CategoryTasks} options={{
           headerShown: false,
         }} />
   </CategoryStack.Navigator>

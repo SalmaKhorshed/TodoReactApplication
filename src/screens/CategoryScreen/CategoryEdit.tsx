@@ -35,7 +35,7 @@ const CategoryEdit = () => {
         id,
         name,
     };
-    updateCategory(updatedCategory.id, { name});
+    updateCategory(category as Category, updatedCategory);
     setCategory(updatedCategory);
     setName('');
     navigation.navigate('CategoryScreen' as never);

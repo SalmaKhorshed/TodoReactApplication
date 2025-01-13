@@ -73,7 +73,7 @@ const CategoryScreen = () => {
                 keyExtractor={(item) => item.id.toString()}
                 numColumns={2} 
                 renderItem={({ item }) => (
-                  <Pressable onPress={() => navigation.navigate('TodoDetails', { id: item.id })}>
+                  <Pressable onPress={() => navigation.navigate('CategoryTasks' as never, { id: item.name })}>
                    <Card style={styles.card}>
                          <Card.Content style={styles.cardContent}>
                          <Image
