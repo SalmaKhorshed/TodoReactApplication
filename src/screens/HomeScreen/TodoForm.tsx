@@ -1,11 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/react-in-jsx-scope */
 import { useNavigation } from "@react-navigation/native";
 import { ArrowLeft } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Dimensions, Image, ImageBackground, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DatePicker from 'react-native-date-picker';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useTodoStore } from "../../stores/todoStore";
+import { useCategoryStore } from "../../stores/categoryStore";
 
 const TodoForm = () => {
    const {addTodo} = useTodoStore();
@@ -15,7 +17,26 @@ const TodoForm = () => {
    const [date, setDate] = useState(new Date());
    const [showPicker, setShowPicker] = useState(false);
    const [formattedDate, setFormattedDate] = useState('');
+   const [options, setOptions] = useState([{}]);
+   const { categories,loadCategories} = useCategoryStore();
    const navigation = useNavigation();
+
+   useEffect(() => {
+      const fetchCategories = async () => {
+         await loadCategories();
+      };
+      fetchCategories();
+   }, []);
+    useEffect(() => {
+      if (categories.length > 0) {
+         const categoryOptions = categories.map(category => ({
+            key: category.id.toString(),
+            value: category.name,
+         }));
+         setOptions(categoryOptions);
+      }
+   }, [categories]);
+  
    const handleConfirm = (selectedDate: Date) => {
       setShowPicker(false);
       setDate(selectedDate);
@@ -42,16 +63,7 @@ const TodoForm = () => {
     navigation.navigate('HomeScreen' as never);
 
  };
-   const data = [
-    { label: 'Item 1', value: 'category1' },
-    { label: 'Item 2', value: 'category2' },
-    { label: 'Item 3', value: 'category3' },
-    { label: 'Item 4', value: 'category4' },
-    { label: 'Item 5', value: 'category5' },
-    { label: 'Item 6', value: 'category6' },
-    { label: 'Item 7', value: 'category7' },
-    { label: 'Item 8', value: 'category8' },
-  ];
+
   const navigateToTodoForm = () => {
     navigation.navigate('HomeScreen' as never);
   };
@@ -107,22 +119,19 @@ const TodoForm = () => {
                         />
                         <Text style={styles.nameLabel}>Task category</Text>
                         <Dropdown
-                               style={styles.input}
-                               data={data}
-                              
-                               maxHeight={150}
-                               placeholder="Select category ..."
-                               placeholderStyle={styles.placeholderStyle}
-                               value={category}
-                               labelField="label"
-                                valueField="value"
-                                searchPlaceholder="Search..."
-                               onChange={item => {
-                                   setCategory(item.value);
-
-                               }}
-                               
-                               />
+                           style={styles.input}
+                           data={options}
+                           maxHeight={150}
+                           placeholder="Select category ..."
+                           placeholderStyle={styles.placeholderStyle}
+                           value={category}
+                           labelField="value"
+                           valueField="value"
+                           searchPlaceholder="Search..."
+                           onChange={item => {
+                              setCategory(item.value);
+                           }}
+                        />
                         <Text style={styles.nameLabel}>Task description</Text>
                         <TextInput
                            style={styles.textinput}

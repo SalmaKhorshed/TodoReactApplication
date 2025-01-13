@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { RootStackParamList } from "../../../App";
 import DatePicker from "react-native-date-picker";
 import { Dropdown } from "react-native-element-dropdown";
+import { useCategoryStore } from "../../stores/categoryStore";
 
 
 const TodoDetails = () => {
@@ -24,10 +25,30 @@ const TodoDetails = () => {
     const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
     const [formattedDate, setFormattedDate] = useState('');
+    const [options, setOptions] = useState<{ key: string; value: string }[]>([]);
+
+    const { categories,loadCategories} = useCategoryStore();
     
     const navigateTo = () => {
         navigation.navigate('HomeScreen' as never);
       };
+      useEffect(() => {
+        const fetchCategories = async () => {
+           await loadCategories();
+        };
+        fetchCategories();
+     }, []);
+     useEffect(() => {
+      if (categories.length > 0) {
+        const categoryOptions = categories.map(category => ({
+          key: category.id.toString(),
+          value: category.name,
+          label: category.name,
+        }));
+        setOptions(categoryOptions);
+      }
+    }, [categories]);
+    
 
       useEffect(() => {
          loadTodos();
@@ -50,16 +71,7 @@ const TodoDetails = () => {
         setFormattedDate(selectedDate.toLocaleString());
      };
 
-      const data = [
-        { label: 'Item 1', value: 'category1' },
-        { label: 'Item 2', value: 'category2' },
-        { label: 'Item 3', value: 'category3' },
-        { label: 'Item 4', value: 'category4' },
-        { label: 'Item 5', value: 'category5' },
-        { label: 'Item 6', value: 'category6' },
-        { label: 'Item 7', value: 'category7' },
-        { label: 'Item 8', value: 'category8' },
-      ];
+     
       const handleDelete = () => {
         deleteTodo(id);
         navigation.navigate('HomeScreen' as never);
@@ -140,7 +152,7 @@ const TodoDetails = () => {
                 <Text style={styles.nameLabel}>Task Category</Text>
                 <Dropdown
                                style={styles.input}
-                               data={data}
+                               data={options}
                                maxHeight={150}
                                placeholder="Select category ..."
                                placeholderStyle={styles.placeholderStyle}

@@ -4,10 +4,10 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Edit, PlusIcon, Trash } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import {  FlatList, Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {  FlatList, Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { RootStackParamList } from "../../../App";
 import { useNavigation } from "@react-navigation/native";
-import { useCategoryStore } from "../../stores/categoryStore";
+import { Category, useCategoryStore } from "../../stores/categoryStore";
 import { Card } from "react-native-paper";
 
 
@@ -32,8 +32,8 @@ const CategoryScreen = () => {
       }
     }, [categories, searchQuery]);
 
-    const handleDelete = (id:string) => {
-      deleteCategory(id);
+    const handleDelete = (category: Category) => {
+      deleteCategory(category);
     };
     const handleEdit = (id:string) => {
       navigation.navigate('CategoryEdit' as never, { id } );
@@ -84,7 +84,7 @@ const CategoryScreen = () => {
                          <Text style={styles.taskTitle}> {item.name}</Text>
                          <View style={styles.btns}>
         
-                           <TouchableOpacity style={styles.delete} onPress={()=>handleDelete(item.id)}  >
+                           <TouchableOpacity style={styles.delete} onPress={()=>handleDelete(item)}  >
                            <Trash size={20} color="white" />
                         </TouchableOpacity>
 
@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
   },
    taskContainer:{
       marginTop:10,
+      paddingBottom:20,
       width: '97%',
    },
    cardContent:{

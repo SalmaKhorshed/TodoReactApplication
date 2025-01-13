@@ -21,6 +21,14 @@ const HomeScreen = () => {
     }, []);
 
     useEffect(() => {
+      const unsubscribe = useTodoStore.subscribe((state) => {
+        setFilteredTodos(state.todos);
+      });
+  
+      return () => unsubscribe();
+    }, []);
+
+    useEffect(() => {
       if (searchQuery.trim() === '') {
         setFilteredTodos(todos);
       } else {

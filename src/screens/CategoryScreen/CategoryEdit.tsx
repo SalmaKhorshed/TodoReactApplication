@@ -8,7 +8,6 @@ import { Category, useCategoryStore } from "../../stores/categoryStore";
 import { RootStackParamList } from "../../../App";
 
 const CategoryEdit = () => {
-   const {addCategory} = useCategoryStore();
    const { categories, loadCategories,updateCategory} = useCategoryStore();
    const [name, setName] = useState('');
    type TodoDetailsRouteProp = RouteProp<RootStackParamList, 'CategoryScreen'>;
