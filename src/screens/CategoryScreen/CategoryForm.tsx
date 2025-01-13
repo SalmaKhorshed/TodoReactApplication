@@ -7,8 +7,8 @@ import DatePicker from 'react-native-date-picker';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useTodoStore } from "../../stores/todoStore";
 
-const TodoForm = () => {
-   const {addTodo} = useTodoStore();
+const CategoryForm = () => {
+    const {addTodo} = useTodoStore();
    const [title, setTitle] = useState('');
    const [description, setDescription] = useState('');
    const [category, setCategory] = useState('');
@@ -52,8 +52,8 @@ const TodoForm = () => {
     { label: 'Item 7', value: 'category7' },
     { label: 'Item 8', value: 'category8' },
   ];
-  const navigateToTodoForm = () => {
-    navigation.navigate('HomeScreen' as never);
+  const navigateToCategory = () => {
+    navigation.navigate('CategoryScreen' as never);
   };
 
    return (
@@ -70,9 +70,9 @@ const TodoForm = () => {
            
                <ScrollView contentContainerStyle={styles.scrollView}>
                   <View style={styles.view}>
-                  <TouchableOpacity style ={styles.back} onPress={navigateToTodoForm}>
+                  <TouchableOpacity style ={styles.back} onPress={navigateToCategory}>
                      <ArrowLeft size={20} color="#9e0e4a" />
-                     <Text style={{color:'#9e0e4a',fontSize:15 ,paddingLeft:3 ,fontWeight:'500'}}>Back to home</Text>
+                     <Text style={{color:'#9e0e4a',fontSize:15 ,paddingLeft:3 ,fontWeight:'500'}}>Back to categories</Text>
                    </TouchableOpacity>
                      <Text style={styles.header}>Start your Journey</Text>
                      <Text style={styles.secondHeader}>with a new task !</Text>
@@ -239,4 +239,4 @@ const styles = StyleSheet.create({
    },
 });
 
-export default TodoForm;
+export default CategoryForm;

@@ -1,12 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/react-in-jsx-scope */
 
+import { StackNavigationProp } from "@react-navigation/stack";
+import { PlusIcon } from "lucide-react-native";
 import { useState } from "react";
-import { Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { RootStackParamList } from "../../../App";
+import { useNavigation } from "@react-navigation/native";
 
 
-const Category = () => {
+const CategoryScreen = () => {
+   type CategoryScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CategoryScreen'>;
+   const navigation = useNavigation<CategoryScreenNavigationProp>();
    const [searchQuery, setSearchQuery] = useState("");
+   const navigateToCategoryForm = () => {
+      navigation.navigate('CategoryForm' as never);
+    };
    return (
       <KeyboardAvoidingView
       behavior={Platform.OS === 'android' ? 'height' : 'padding'}
@@ -25,6 +34,12 @@ const Category = () => {
 
          />
          </View>
+         <View style={styles.addCategory}>
+            <Text style={styles.categoryHeader}>Add a new Category  </Text>
+            <TouchableOpacity style={styles.button} onPress={navigateToCategoryForm}>
+               <PlusIcon size={25} color="#fff" />
+            </TouchableOpacity>
+         </View>
          </View>
          </ScrollView>
       </KeyboardAvoidingView>
@@ -41,6 +56,31 @@ const styles = StyleSheet.create({
    search:{
       marginTop:20,
       width: '97%',
+   },
+   addCategory:{
+      flexDirection: 'row',
+   },
+   button: {
+      width: 40,
+      height: 40,
+      marginTop: 12,
+      borderRadius: 30,
+      backgroundColor: '#6200ee',
+      justifyContent: 'center',
+      alignItems: 'center',
+      elevation: 5,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.3,
+      shadowRadius: 4,
+   },
+    categoryHeader:{
+      marginTop: 2,
+      padding: 17,
+      paddingBottom: 8,
+      fontSize: 19,
+      fontWeight: '500',
+      color: '#000',
    },
 
    scrollView: {
@@ -76,4 +116,4 @@ const styles = StyleSheet.create({
    },
 
 });
-export default Category;
+export default CategoryScreen;

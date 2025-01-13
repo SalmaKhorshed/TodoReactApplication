@@ -1,21 +1,43 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen/Home';
-import Category from '../screens/CategoryScreen/Category';
+import CategoryScreen from '../screens/CategoryScreen/Category';
 import Profile from '../screens/ProfileScreen/Profile';
 import Settings from '../screens/SettingsScreen/Settings';
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { House, Shapes, CircleUserRound, SettingsIcon } from 'lucide-react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import CategoryForm from '../screens/CategoryScreen/CategoryForm';
+import { getFocusedRouteNameFromRoute, Route, useRoute } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
+const CategoryStack = createStackNavigator();
+
+const CategoryFlow = () => (
+  <CategoryStack.Navigator screenOptions={{ headerShown: false}}>
+    <CategoryStack.Screen name="CategoryScreen" component={CategoryScreen} />
+    <CategoryStack.Screen name="CategoryForm" component={CategoryForm} options={{
+          headerShown: false,
+        }} />
+  </CategoryStack.Navigator>
+);
 
 const BottomTabs = () => {
+  const getTabBarStyle = (route: Partial<Route<string>>) => {
+    const routeName = getFocusedRouteNameFromRoute(route) ?? 'CategoryScreen';
+    if (routeName === 'CategoryForm') {
+      return styles.noBar;
+    }
+    return styles.tabBar; // Default tab bar style
+  };
+ 
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle:styles.tabBar ,
         tabBarHideOnKeyboard: true,
       }}
     >
@@ -38,8 +60,9 @@ const BottomTabs = () => {
       />
       <Tab.Screen
         name="Category"
-        component={Category}
-        options={{
+        component={CategoryFlow}
+        options={({ route}) => ({
+          tabBarStyle: getTabBarStyle(route),
           tabBarButton: (props) => (
             <TouchableWithoutFeedback onPress={props.onPress}>
               <View style={styles.view}>{props.children}</View>
@@ -51,7 +74,7 @@ const BottomTabs = () => {
               <Text style={[styles.tabText, focused && styles.activeText]}>Category</Text>
             </View>
           ),
-        }}
+        })}
       />
       <Tab.Screen
         name="Profile"
@@ -94,6 +117,9 @@ const BottomTabs = () => {
 const styles = StyleSheet.create({
   view:{
     marginLeft: 30,
+},
+noBar:{
+  display: 'none',
 },
   tabBar: {
     position: 'absolute',
