@@ -9,7 +9,8 @@ import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { House, Shapes, CircleUserRound, SettingsIcon } from 'lucide-react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import CategoryForm from '../screens/CategoryScreen/CategoryForm';
-import { getFocusedRouteNameFromRoute, Route, useRoute } from '@react-navigation/native';
+import { getFocusedRouteNameFromRoute, Route } from '@react-navigation/native';
+import CategoryEdit from '../screens/CategoryScreen/CategoryEdit';
 
 const Tab = createBottomTabNavigator();
 const CategoryStack = createStackNavigator();
@@ -20,13 +21,16 @@ const CategoryFlow = () => (
     <CategoryStack.Screen name="CategoryForm" component={CategoryForm} options={{
           headerShown: false,
         }} />
+         <CategoryStack.Screen name="CategoryEdit" component={CategoryEdit} options={{
+          headerShown: false,
+        }} />
   </CategoryStack.Navigator>
 );
 
 const BottomTabs = () => {
   const getTabBarStyle = (route: Partial<Route<string>>) => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'CategoryScreen';
-    if (routeName === 'CategoryForm') {
+    if (routeName !== 'CategoryScreen' ) {
       return styles.noBar;
     }
     return styles.tabBar; // Default tab bar style

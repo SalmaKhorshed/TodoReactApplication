@@ -78,11 +78,9 @@ const HomeScreen = () => {
                          <View style={styles.chipView}>
                            <Chip style={styles.chip}>{item.category}</Chip>
                          </View>
-                        
                          </Card.Content>
                    </Card>
                    </Pressable>
-                   
                 )}
                 />
 
@@ -97,10 +95,7 @@ const HomeScreen = () => {
 
             </View>
             )}
-           
          </View>
-         
-
 
       </View>
    </View>

@@ -1,29 +1,53 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/react-in-jsx-scope */
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { ArrowLeft } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Dimensions, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useCategoryStore } from "../../stores/categoryStore";
+import { Category, useCategoryStore } from "../../stores/categoryStore";
+import { RootStackParamList } from "../../../App";
 
-const CategoryForm = () => {
+const CategoryEdit = () => {
    const {addCategory} = useCategoryStore();
+   const { categories, loadCategories,updateCategory} = useCategoryStore();
    const [name, setName] = useState('');
+   type TodoDetailsRouteProp = RouteProp<RootStackParamList, 'CategoryScreen'>;
+   const [category, setCategory] = useState<Category | null>(null);
+   const route = useRoute<TodoDetailsRouteProp>();
+   const { id  } = route.params;
    const navigation = useNavigation();
+
+   useEffect(() => {
+    loadCategories();
+  }, []);
+
+  useEffect(() => {
+   const foundCategory = categories.find((category) => category.id === id);
+   setCategory(foundCategory as Category);
+   setName( foundCategory?.name as string);
+ }, [id]);
    
    const handleSave = () => {
     if (!name.trim()) {
         Alert.alert('Validation Error', 'Category name is required .');
         return;
       }
-    const newCategory = {
-        id: Date.now().toString(),
+      const updatedCategory = {
+        id,
         name,
-
     };
-    addCategory(newCategory);
+    updateCategory(updatedCategory.id, { name});
+    setCategory(updatedCategory);
     setName('');
     navigation.navigate('CategoryScreen' as never);
  };
+
+ const handleCancel = () => {
+    if (category) {
+      setName(category.name);
+    }
+    navigation.navigate('CategoryScreen' as never);
+  };
 
   const navigateToCategory = () => {
     navigation.navigate('CategoryScreen' as never);
@@ -47,8 +71,7 @@ const CategoryForm = () => {
                      <ArrowLeft size={20} color="#9e0e4a" />
                      <Text style={{color:'#9e0e4a',fontSize:15 ,paddingLeft:3 ,fontWeight:'500'}}>Back to categories</Text>
                    </TouchableOpacity>
-                     <Text style={styles.header}>Create a new category</Text>
-                     <Text style={styles.secondHeader}>for your todos !</Text>
+                     <Text style={styles.header}>Edit category</Text>
                      <Image
                         style={styles.icon}
                         source={require('../../assets/images/category.png')}
@@ -62,9 +85,15 @@ const CategoryForm = () => {
                            onChangeText={setName}
                            placeholder="Add category name ..."
                         />
-                        <TouchableOpacity style={styles.button} onPress={handleSave}>
-                           <Text style={styles.buttonText}>Add Category</Text>
-                        </TouchableOpacity>
+                         <View style={styles.btns}>
+                            <TouchableOpacity style={styles.delete} onPress={handleCancel}  >
+                                <Text style={styles.deleteText}>Cancel </Text>
+                            </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.edit} onPress={handleSave} >
+                                    <Text style={styles.deleteText}>Save </Text>
+                                </TouchableOpacity>
+                        </View>
                      </View>
                   </View>
                </ScrollView>
@@ -88,6 +117,47 @@ const styles = StyleSheet.create({
       marginLeft: 10,
      
    },
+   btns:{
+    flexDirection:'row',
+    justifyContent:'center',
+    marginTop: 20,
+},
+deleteText:{
+    color:'white',
+    paddingLeft: 5,
+},
+edit:{
+    height: 50,
+    padding:10,
+    marginTop: 18,
+    marginRight: 20,
+    borderRadius: 10,
+    backgroundColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection:'row',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+},
+delete: {
+    height: 50,
+    padding:10,
+    marginTop: 18,
+    marginRight: 20,
+    borderRadius: 10,
+    backgroundColor: 'darkred',
+    justifyContent: 'center',
+    flexDirection:'row',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+ },
    keyboardAvoidingView: {
       flex: 1,
    },
@@ -170,4 +240,4 @@ const styles = StyleSheet.create({
    },
 });
 
-export default CategoryForm;
+export default CategoryEdit;
