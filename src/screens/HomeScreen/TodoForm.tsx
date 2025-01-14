@@ -17,6 +17,9 @@ const TodoForm = () => {
    const [category, setCategory] = useState('');
    const [date, setDate] = useState(new Date());
    const [showPicker, setShowPicker] = useState(false);
+   const [titleError, setTitleError] = useState('');
+   const [categoryError, setCategoryError] = useState('');
+
    const [formattedDate, setFormattedDate] = useState('');
    const [options, setOptions] = useState([{}]);
    const { categories,loadCategories} = useCategoryStore();
@@ -48,7 +51,8 @@ const TodoForm = () => {
    };
    const handleSave = () => {
     if (!title.trim() || !category.trim()) {
-        Alert.alert('Validation Error', 'Title and Category are required.');
+        setTitleError('Title is required');
+        setCategoryError('Category is required');
         return;
       }
     const newTodo = {
@@ -64,6 +68,8 @@ const TodoForm = () => {
     setCategory('');
     setDate(new Date());
     setFormattedDate('');
+    setTitleError('');
+    setCategoryError('');
     navigation.navigate('HomeScreen' as never);
 
  };
@@ -106,6 +112,7 @@ const TodoForm = () => {
                            onChangeText={setTitle}
                            placeholder="Add task title ..."
                         />
+                        {titleError && <Text style={styles.errorText}>{titleError}</Text>}
                         <Text style={[styles.nameLabel,isDarkMode && { color: '#fff' }]}>Task date</Text>
                         <Pressable onPress={() => setShowPicker(true)}>
                            <TextInput
@@ -137,6 +144,7 @@ const TodoForm = () => {
                               setCategory(item.value);
                            }}
                         />
+                        {categoryError && <Text style={styles.errorText}>{categoryError}</Text>}
                         <Text style={[styles.nameLabel,isDarkMode && { color: '#fff' }]}>Task description</Text>
                         <TextInput
                            style={styles.textinput}
@@ -165,6 +173,11 @@ const styles = StyleSheet.create({
       width: screenWidth,
       height: screenHeight,
    },
+   errorText: {
+      color: 'red',
+      marginLeft: 1,
+    
+   },
    back:{
     flexDirection: 'row',
       alignItems: 'center',
@@ -177,7 +190,7 @@ const styles = StyleSheet.create({
    },
    scrollView: {
      marginBottom:10,
-      flexGrow: 1,
+     
    },
    view: {
       alignItems: 'flex-start',

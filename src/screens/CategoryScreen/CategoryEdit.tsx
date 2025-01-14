@@ -16,6 +16,7 @@ const CategoryEdit = () => {
    const route = useRoute<TodoDetailsRouteProp>();
    const { id  } = route.params;
    const navigation = useNavigation();
+   const [titleError, setTitleError] = useState('');
    const {isDarkMode} = useThemeStore();
    const darkModeBackground = require('../../assets/images/background3.jpg'); 
    const lightModeBackground = require('../../assets/images/background3.jpeg');
@@ -33,7 +34,7 @@ const CategoryEdit = () => {
    
    const handleSave = () => {
     if (!name.trim()) {
-        Alert.alert('Validation Error', 'Category name is required .');
+        setTitleError('Category name is required');
         return;
       }
       const updatedCategory = {
@@ -43,6 +44,7 @@ const CategoryEdit = () => {
     updateCategory(category as Category, updatedCategory);
     setCategory(updatedCategory);
     setName('');
+    setTitleError('');
     navigation.navigate('CategoryScreen' as never);
  };
 
@@ -89,6 +91,7 @@ const CategoryEdit = () => {
                            onChangeText={setName}
                            placeholder="Add category name ..."
                         />
+                        {titleError && <Text style={styles.errorText}>{titleError}</Text>}
                          <View style={styles.btns}>
                             <TouchableOpacity style={styles.delete} onPress={handleCancel}  >
                                 <Text style={styles.deleteText}>Cancel </Text>
@@ -113,6 +116,11 @@ const styles = StyleSheet.create({
    container: {
       width: screenWidth,
       height: screenHeight,
+   },
+   errorText: {
+      color: 'red',
+      marginLeft: 1,
+    
    },
    back:{
     flexDirection: 'row',

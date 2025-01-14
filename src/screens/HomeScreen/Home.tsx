@@ -3,11 +3,12 @@
 import { useNavigation, useTheme } from "@react-navigation/native";
 import { PlusIcon } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Image, StyleSheet, Text, View,TextInput, TouchableOpacity, FlatList, Pressable} from "react-native";
+import { Dimensions, Image, StyleSheet, Text, View,TextInput, TouchableOpacity, FlatList, Pressable, Alert} from "react-native";
 import { useTodoStore } from "../../stores/todoStore";
 import { Card, Chip } from "react-native-paper";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../App";
+import { useCategoryStore } from "../../stores/categoryStore";
 
 
 const HomeScreen = () => {
@@ -16,11 +17,19 @@ const HomeScreen = () => {
    const { todos, loadTodos } = useTodoStore();
    const [searchQuery, setSearchQuery] = useState("");
    const [filteredTodos, setFilteredTodos] = useState(todos);
+   const { categories,loadCategories} = useCategoryStore();
    const theme = useTheme();
 
    useEffect(() => {
       loadTodos();
     }, []);
+
+    useEffect(() => {
+      const fetchCategories = async () => {
+         await loadCategories();
+      };
+      fetchCategories();
+   }, []);
 
     useEffect(() => {
       const unsubscribe = useTodoStore.subscribe((state) => {
@@ -42,6 +51,10 @@ const HomeScreen = () => {
     }, [todos, searchQuery]);
 
    const navigateToTodoForm = () => {
+      if(categories.length === 0) {
+         Alert.alert('Error', 'Please add a category first.');
+         return;
+        }
      navigation.navigate('TodoForm' as never);
    };
    return (

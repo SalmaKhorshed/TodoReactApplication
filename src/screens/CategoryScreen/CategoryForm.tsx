@@ -11,12 +11,13 @@ const CategoryForm = () => {
    const [name, setName] = useState('');
    const navigation = useNavigation();
    const {isDarkMode} = useThemeStore();
+   const [titleError, setTitleError] = useState('');
    const darkModeBackground = require('../../assets/images/background3.jpg'); 
    const lightModeBackground = require('../../assets/images/background3.jpeg');
    
    const handleSave = () => {
     if (!name.trim()) {
-        Alert.alert('Validation Error', 'Category name is required .');
+        setTitleError('Category name is required');
         return;
       }
     const newCategory = {
@@ -26,6 +27,7 @@ const CategoryForm = () => {
     };
     addCategory(newCategory);
     setName('');
+    setTitleError('');
     navigation.navigate('CategoryScreen' as never);
  };
 
@@ -66,6 +68,7 @@ const CategoryForm = () => {
                            onChangeText={setName}
                            placeholder="Add category name ..."
                         />
+                        {titleError ? <Text style={styles.errorText}>{titleError}</Text> : null}
                         <TouchableOpacity style={styles.button} onPress={handleSave}>
                            <Text style={styles.buttonText}>Add Category</Text>
                         </TouchableOpacity>
@@ -84,6 +87,11 @@ const styles = StyleSheet.create({
    container: {
       width: screenWidth,
       height: screenHeight,
+   },
+   errorText: {
+      color: 'red',
+      marginLeft: 1,
+    
    },
    back:{
     flexDirection: 'row',

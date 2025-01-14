@@ -28,6 +28,8 @@ const TodoDetails = () => {
     const [formattedDate, setFormattedDate] = useState('');
     const [options, setOptions] = useState<{ key: string; value: string }[]>([]);
     const {isDarkMode} = useThemeStore();
+    const [titleError, setTitleError] = useState('');
+   const [categoryError, setCategoryError] = useState('');
     const {theme} = useTheme();
     const darkModeBackground = require('../../assets/images/formBackground(1).jpg'); 
     const lightModeBackground = require('../../assets/images/formBackground.jpg');
@@ -94,9 +96,10 @@ const TodoDetails = () => {
       };
       const handleSave = () => {
         if (!title.trim() || !category.trim()) {
-            Alert.alert('Validation Error', 'Title and Category are required.');
-            return;
-          }
+          setTitleError('Title is required');
+          setCategoryError('Category is required');
+          return;
+        }
         const updatedTodo = {
             id,
             title,
@@ -107,6 +110,8 @@ const TodoDetails = () => {
         updateTodo(updatedTodo.id, { title, description, category, date });
         setTodo(updatedTodo);
         setIsEditMode(false);
+        setTitleError('');
+        setCategoryError('');
       };
 
 
@@ -138,6 +143,7 @@ const TodoDetails = () => {
                            onChangeText={setTitle}
                            placeholder="Add task title ..."
                 />
+                {titleError && <Text style={styles.errorText}>{titleError}</Text>}
                 <Text style={[styles.nameLabel,isDarkMode && {color:"#fff"}]}>Task Due date</Text>
                 <Pressable onPress={() => setShowPicker(true)}>
                            <TextInput
@@ -171,6 +177,7 @@ const TodoDetails = () => {
                                }}
                                
                                />
+                  {categoryError && <Text style={styles.errorText}>{categoryError}</Text>}
                 <Text style={[styles.nameLabel,isDarkMode && { color: '#fff' }]}>Task Description</Text>
                 <TextInput
                            style={styles.textinput}
@@ -232,6 +239,11 @@ const styles = StyleSheet.create({
         width: screenWidth,
         height: screenHeight,
      },
+     errorText: {
+      color: 'red',
+      marginLeft: 1,
+    
+   },
     textinput: {
         borderWidth: 1.2,
         borderRadius: 16,
