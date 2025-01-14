@@ -3,13 +3,15 @@ import { Image, ImageBackground, StyleSheet, Switch, Text, View } from "react-na
 import { Card } from "react-native-paper";
 import { SettingsIcon , MoonStar,Sun} from 'lucide-react-native';
 import { useThemeStore } from '../../stores/themeStore';
+import { useTheme } from "@react-navigation/native";
 
 
 const Settings = () => {
    const { isDarkMode, toggleDarkMode} = useThemeStore();
+   const theme = useTheme();
    return (
      
-      <View style={[styles.container, isDarkMode ? styles.dark : styles.light]}>
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
          <View style={styles.imageBackgroundWrapper}>
          <ImageBackground
          style={styles.back}

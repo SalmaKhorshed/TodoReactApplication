@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/react-in-jsx-scope */
-import { RouteProp, useNavigation, useRoute, } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute, useTheme, } from "@react-navigation/native";
 import { ArrowLeft, Edit, Trash } from "lucide-react-native";
 import { Alert, Dimensions, Image, ImageBackground, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Todo, useTodoStore  } from "../../stores/todoStore";
@@ -9,6 +9,7 @@ import { RootStackParamList } from "../../../App";
 import DatePicker from "react-native-date-picker";
 import { Dropdown } from "react-native-element-dropdown";
 import { useCategoryStore } from "../../stores/categoryStore";
+import { useThemeStore } from "../../stores/themeStore";
 
 
 const TodoDetails = () => {
@@ -26,7 +27,11 @@ const TodoDetails = () => {
     const [showPicker, setShowPicker] = useState(false);
     const [formattedDate, setFormattedDate] = useState('');
     const [options, setOptions] = useState<{ key: string; value: string }[]>([]);
-
+    const {isDarkMode} = useThemeStore();
+    const {theme} = useTheme();
+    const darkModeBackground = require('../../assets/images/formBackground(1).jpg'); 
+    const lightModeBackground = require('../../assets/images/formBackground.jpg');
+ 
     const { categories,loadCategories} = useCategoryStore();
     
     const navigateTo = () => {
@@ -109,7 +114,7 @@ const TodoDetails = () => {
     <ImageBackground
     blurRadius={2}
        style={styles.container}
-       source={require('../../assets/images/formBackground.jpg')}
+       source={isDarkMode ? darkModeBackground : lightModeBackground}
        resizeMode="cover"
     >
     <View style={styles.view}>
@@ -122,18 +127,18 @@ const TodoDetails = () => {
          source={require('../../assets/images/background2.jpg')}
          resizeMode="cover"
       />
-      <Text style={styles.nameHeader}>Task details</Text>
+      <Text style={[styles.nameHeader]}>Task details</Text>
       <View style={styles.content}>
         {isEditMode ? (
          <>
-                <Text style={styles.nameLabel}>Task Title</Text>
+                <Text style={[styles.nameLabel,isDarkMode && { color: '#fff' }]}>Task Title</Text>
                 <TextInput
                            style={styles.input}
                            value={title}
                            onChangeText={setTitle}
                            placeholder="Add task title ..."
                 />
-                <Text style={styles.nameLabel}>Task Due date</Text>
+                <Text style={[styles.nameLabel,isDarkMode && {color:"#fff"}]}>Task Due date</Text>
                 <Pressable onPress={() => setShowPicker(true)}>
                            <TextInput
                               style={styles.input}
@@ -149,7 +154,7 @@ const TodoDetails = () => {
                            onConfirm={handleConfirm}
                            onCancel={() => setShowPicker(false)}
                         />
-                <Text style={styles.nameLabel}>Task Category</Text>
+                <Text style={[styles.nameLabel,isDarkMode && {color:"#fff"}]}>Task Category</Text>
                 <Dropdown
                                style={styles.input}
                                data={options}
@@ -166,7 +171,7 @@ const TodoDetails = () => {
                                }}
                                
                                />
-                <Text style={styles.nameLabel}>Task Description</Text>
+                <Text style={[styles.nameLabel,isDarkMode && { color: '#fff' }]}>Task Description</Text>
                 <TextInput
                            style={styles.textinput}
                            placeholder="Add task description ..."
@@ -189,14 +194,14 @@ const TodoDetails = () => {
          </>
         ) : (
             <>
-                <Text style={styles.nameLabel}>Task Title</Text>
-                <Text style={styles.name}>{todo?.title}</Text>
-                <Text style={styles.nameLabel}>Task Due date</Text>
-                <Text style={styles.name}>{formattedDate}</Text>
-                <Text style={styles.nameLabel}>Task Category</Text>
-                <Text style={styles.name}>{todo?.category}</Text>
-                <Text style={styles.nameLabel}>Task Description</Text>
-                <Text style={styles.name}>{todo?.description}</Text>
+                <Text style={[styles.nameLabel,isDarkMode && { color: '#fff' }]}>Task Title</Text>
+                <Text style={[styles.name, isDarkMode && {color:'#d15a8c'}]}>{todo?.title}</Text>
+                <Text style={[styles.nameLabel,isDarkMode && { color: '#fff' }]}>Task Due date</Text>
+                <Text style={[styles.name,isDarkMode && {color:'#d15a8c'}]}>{formattedDate}</Text>
+                <Text style={[styles.nameLabel,isDarkMode && { color: '#fff' }]}>Task Category</Text>
+                <Text style={[styles.name,isDarkMode && {color:'#d15a8c'}]}>{todo?.category}</Text>
+                <Text style={[styles.nameLabel,isDarkMode && { color: '#fff' }]}>Task Description</Text>
+                <Text style={[styles.name,isDarkMode && {color:'#d15a8c'}]}>{todo?.description}</Text>
                 <View style={styles.btns}>
         
                 <TouchableOpacity style={styles.delete} onPress={handleDelete} >

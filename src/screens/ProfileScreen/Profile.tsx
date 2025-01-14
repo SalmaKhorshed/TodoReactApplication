@@ -1,7 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { useTheme } from "@react-navigation/native";
 import { Dimensions, StyleSheet, Text, View, ImageBackground } from "react-native";
 import { Image } from "react-native";
 import { Chip } from 'react-native-paper';
+import { useThemeStore } from "../../stores/themeStore";
 
 const user = {
    name: 'Salma Ahmed',
@@ -10,11 +12,15 @@ const user = {
 };
 
 const Profile = () => {
+   const theme = useTheme();
+   const {isDarkMode} =  useThemeStore();
+   const darkModeBackground = require('../../assets/images/watermark(1).jpg'); 
+   const lightModeBackground = require('../../assets/images/watermark.jpg');
    return (
       <ImageBackground
       blurRadius={2}
          style={styles.container}
-         source={require('../../assets/images/watermark.jpg')}
+         source={isDarkMode ? darkModeBackground : lightModeBackground}
          resizeMode="cover"
       >
          <View style={styles.view}>
@@ -30,8 +36,8 @@ const Profile = () => {
                source={require('../../assets/images/avatar.jpg')}
                resizeMode="contain"
             />
-            <Text style={styles.name}>{user.name}</Text>
-            <Text style={styles.about}>{user.role}</Text>
+            <Text style={[styles.name,{color: theme.colors.text}]}>{user.name}</Text>
+            <Text style={[styles.about,{color: theme.colors.text}]}>{user.role}</Text>
             <View style={styles.chipView}>
                <Chip style={styles.chip}>React</Chip>
                <Chip style={styles.chip}>NextJs</Chip>
@@ -39,9 +45,9 @@ const Profile = () => {
             </View>
             <View style={styles.cardView}>
                <View style={styles.card}>
-                  <Text style={styles.cardTitle}>ABOUT ME</Text>
+                  <Text style={[styles.cardTitle,{color: theme.colors.text}]}>ABOUT ME</Text>
                   <View>
-                     <Text style={styles.cardContent}>{user.about}</Text>
+                     <Text style={[styles.cardContent,{color: theme.colors.text}]}>{user.about}</Text>
                   </View>
                </View>
             </View>
@@ -125,3 +131,4 @@ const styles = StyleSheet.create({
 });
 
 export default Profile;
+

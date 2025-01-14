@@ -6,9 +6,10 @@ import { Edit, PlusIcon, Trash } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {  FlatList, Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { RootStackParamList } from "../../../App";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import { Category, useCategoryStore } from "../../stores/categoryStore";
 import { Card } from "react-native-paper";
+import { useThemeStore } from "../../stores/themeStore";
 
 
 const CategoryScreen = () => {
@@ -17,6 +18,8 @@ const CategoryScreen = () => {
    const [searchQuery, setSearchQuery] = useState("");
    const { categories, loadCategories,deleteCategory } = useCategoryStore();
    const [filteredCategories, setFilteredCategories] = useState(categories);
+   const theme = useTheme();
+   const {isDarkMode} = useThemeStore();
    useEffect(() => {
       loadCategories();
     }, []);
@@ -47,11 +50,11 @@ const CategoryScreen = () => {
    return (
       <KeyboardAvoidingView
       behavior={Platform.OS === 'android' ? 'height' : 'padding'}
-      style={styles.keyboardAvoidingView}
+      style={[styles.keyboardAvoidingView,{ backgroundColor: theme.colors.background }]}
    >
         <View style={styles.view}>
-        <Text style={styles.header}>Task Categories</Text>
-        <Text style={styles.secondHeader}>Where goals begin !</Text>
+        <Text style={[styles.header, isDarkMode && { color: '#fff' }] }>Task Categories</Text>
+        <Text style={[styles.secondHeader, isDarkMode && { color: '#fff' }]}>Where goals begin !</Text>
         <View style={styles.search}>
             <TextInput
             style={styles.input}
@@ -61,7 +64,7 @@ const CategoryScreen = () => {
          />
          </View>
          <View style={styles.addCategory}>
-            <Text style={styles.categoryHeader}>Add a new Category  </Text>
+            <Text style={[styles.categoryHeader,{ color: theme.colors.text }]}>Add a new Category  </Text>
             <TouchableOpacity style={styles.button} onPress={navigateToCategoryForm}>
                <PlusIcon size={25} color="#fff" />
             </TouchableOpacity>
@@ -121,7 +124,7 @@ const CategoryScreen = () => {
 const styles = StyleSheet.create({
    keyboardAvoidingView: {
       flex: 1,
-      backgroundColor:'#fff',
+      //backgroundColor:'#fff',
    },
    backgroundImage:{
      width: 150,

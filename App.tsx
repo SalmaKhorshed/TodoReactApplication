@@ -4,6 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabs from './src/navigation/BottomTabs';
 import TodoForm from './src/screens/HomeScreen/TodoForm';
 import TodoDetails from './src/screens/HomeScreen/[id]';
+import { useThemeStore } from './src/stores/themeStore';
+import { LightTheme,DarkTheme} from './src/styles/themes';
 
 
 export type RootStackParamList = {
@@ -16,8 +18,12 @@ export type RootStackParamList = {
 };
 const Stack = createStackNavigator<RootStackParamList>(); 
 function App() {
+  const isDarkMode = useThemeStore((state) => state.isDarkMode);
+  const theme = isDarkMode ? DarkTheme : LightTheme;
+
   return (
-    <NavigationContainer>
+
+    <NavigationContainer theme={theme} >
     <Stack.Navigator initialRouteName="HomeScreen" >
       <Stack.Screen name="HomeScreen" component={BottomTabs} options={{ headerShown: false }} />
       <Stack.Screen name="TodoForm" component={TodoForm} options={{ headerShown: false}} />

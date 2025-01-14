@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/react-in-jsx-scope */
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import { PlusIcon } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, View,TextInput, TouchableOpacity, FlatList, Pressable} from "react-native";
@@ -9,12 +9,14 @@ import { Card, Chip } from "react-native-paper";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../App";
 
+
 const HomeScreen = () => {
    type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'HomeScreen'>;
    const navigation = useNavigation<HomeScreenNavigationProp>();
    const { todos, loadTodos } = useTodoStore();
    const [searchQuery, setSearchQuery] = useState("");
    const [filteredTodos, setFilteredTodos] = useState(todos);
+   const theme = useTheme();
 
    useEffect(() => {
       loadTodos();
@@ -43,7 +45,7 @@ const HomeScreen = () => {
      navigation.navigate('TodoForm' as never);
    };
    return (
-       <View style={styles.view}>
+       <View style={[styles.view,{ backgroundColor: theme.colors.background }]}>
       <Image
          style={styles.backgroundImage}
          source={require('../../assets/images/background2.jpg')}
@@ -57,7 +59,7 @@ const HomeScreen = () => {
                />
       <Text style={styles.nameHeader}>Salma Ahmed</Text>
       <View style={styles.content}>
-         <Text style={styles.contentHeader}>Looking for a specific task ? </Text>
+         <Text style={[styles.contentHeader,{color: theme.colors.text}]}>Looking for a specific task ? </Text>
          <View style={styles.search}>
             <TextInput
             style={styles.input}
@@ -68,7 +70,7 @@ const HomeScreen = () => {
          />
          </View>
          <View style={styles.addTask}>
-            <Text style={styles.taskHeader}>Add a new task  </Text>
+            <Text style={[styles.taskHeader,{color: theme.colors.text}]}>Add a new task  </Text>
             <TouchableOpacity style={styles.button} onPress={navigateToTodoForm}>
                <PlusIcon size={25} color="#fff" />
             </TouchableOpacity>
@@ -96,10 +98,10 @@ const HomeScreen = () => {
             <View style={styles.noDataContainer}>
                 <Image
                   style={styles.noData}
-                  source={require('../../assets/images/nodata.jpg')}
+                  source={require('../../assets/images/nodata.png')}
                   resizeMode="contain"
                />
-               <Text style={styles.noTasks}>No tasks found</Text>
+               <Text style={[styles.noTasks,{color: theme.colors.text}]}>No tasks found</Text>
 
             </View>
             )}
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
    view: {
       width: '100%',
       height: '100%',
-      backgroundColor: '#fff',
+      //backgroundColor: '#fff',
    },
    backgroundImage: {
       width: screenWidth,

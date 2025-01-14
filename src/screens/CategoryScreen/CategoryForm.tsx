@@ -4,11 +4,15 @@ import { ArrowLeft } from "lucide-react-native";
 import { useState } from "react";
 import { Alert, Dimensions, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useCategoryStore } from "../../stores/categoryStore";
+import { useThemeStore } from "../../stores/themeStore";
 
 const CategoryForm = () => {
    const {addCategory} = useCategoryStore();
    const [name, setName] = useState('');
    const navigation = useNavigation();
+   const {isDarkMode} = useThemeStore();
+   const darkModeBackground = require('../../assets/images/background3.jpg'); 
+   const lightModeBackground = require('../../assets/images/background3.jpeg');
    
    const handleSave = () => {
     if (!name.trim()) {
@@ -33,7 +37,7 @@ const CategoryForm = () => {
       <ImageBackground
          blurRadius={1}
          style={styles.container}
-         source={require('../../assets/images/background3.jpeg')}
+         source={isDarkMode ? darkModeBackground : lightModeBackground}
          resizeMode="cover"
       >
          <KeyboardAvoidingView
@@ -55,7 +59,7 @@ const CategoryForm = () => {
                         resizeMode="contain"
                      />
                      <View style={styles.form}>
-                        <Text style={styles.nameLabel}>Category name </Text>
+                        <Text style={[styles.nameLabel,isDarkMode && { color: '#fff' }]}>Category name </Text>
                         <TextInput
                            style={styles.input}
                            value={name}

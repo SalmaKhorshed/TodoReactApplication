@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/react-in-jsx-scope */
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/core";
+import { RouteProp, useRoute } from "@react-navigation/core";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import { FlatList, Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { RootStackParamList } from "../../../App";
 import { ArrowLeft } from "lucide-react-native";
@@ -8,6 +9,7 @@ import { Card, Chip } from "react-native-paper";
 import { useEffect, useState } from "react";
 import { useTodoStore } from "../../stores/todoStore";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { useThemeStore } from "../../stores/themeStore";
 
 
 
@@ -20,7 +22,8 @@ const CategoryTasks = () => {
     const navigation = useNavigation();
     const detailsNavigation = useNavigation<HomeScreenNavigationProp>();
     const [filteredTodos, setFilteredTodos] = useState(todos);
-
+     const theme = useTheme();
+     const {isDarkMode} = useThemeStore();
     const navigateToCategory = () => {
         navigation.navigate('CategoryScreen' as never);
       };
@@ -37,15 +40,15 @@ const CategoryTasks = () => {
     return (
         <KeyboardAvoidingView
         behavior={Platform.OS === 'android' ? 'height' : 'padding'}
-        style={styles.keyboardAvoidingView}
+        style={[styles.keyboardAvoidingView, { backgroundColor: theme.colors.background }]}
      >
           <View style={styles.view}>
           <TouchableOpacity style ={styles.back} onPress={navigateToCategory}>
                      <ArrowLeft size={20} color="#9e0e4a" />
                      <Text style={{color:'#9e0e4a',fontSize:15 ,paddingLeft:3 ,fontWeight:'500'}}>Back to categories</Text>
          </TouchableOpacity>
-            <Text style={styles.header}>Tasks for</Text>
-            <Text style={styles.secondHeader}>{id }</Text>
+            <Text style={[styles.header, isDarkMode && {color:"#fff"}]}>Tasks for</Text>
+            <Text style={[styles.secondHeader,isDarkMode && {color:"#fff"}]}>{id }</Text>
           </View>
           <View style={styles.taskContainer}>
             {filteredTodos.length > 0 ? (

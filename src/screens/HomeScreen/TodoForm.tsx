@@ -8,6 +8,7 @@ import DatePicker from 'react-native-date-picker';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useTodoStore } from "../../stores/todoStore";
 import { useCategoryStore } from "../../stores/categoryStore";
+import { useThemeStore } from "../../stores/themeStore";
 
 const TodoForm = () => {
    const {addTodo} = useTodoStore();
@@ -20,6 +21,9 @@ const TodoForm = () => {
    const [options, setOptions] = useState([{}]);
    const { categories,loadCategories} = useCategoryStore();
    const navigation = useNavigation();
+   const {isDarkMode} = useThemeStore();
+   const darkModeBackground = require('../../assets/images/background3.jpg'); 
+   const lightModeBackground = require('../../assets/images/background3.jpeg');
 
    useEffect(() => {
       const fetchCategories = async () => {
@@ -69,10 +73,11 @@ const TodoForm = () => {
   };
 
    return (
+      
       <ImageBackground
          blurRadius={1}
          style={styles.container}
-         source={require('../../assets/images/background3.jpeg')}
+         source={isDarkMode ? darkModeBackground : lightModeBackground}
          resizeMode="cover"
       >
          <KeyboardAvoidingView
@@ -94,14 +99,14 @@ const TodoForm = () => {
                         resizeMode="contain"
                      />
                      <View style={styles.form}>
-                        <Text style={styles.nameLabel}>Task title</Text>
+                        <Text style={[styles.nameLabel , isDarkMode && { color: '#fff' }]}>Task title</Text>
                         <TextInput
                            style={styles.input}
                            value={title}
                            onChangeText={setTitle}
                            placeholder="Add task title ..."
                         />
-                        <Text style={styles.nameLabel}>Task date</Text>
+                        <Text style={[styles.nameLabel,isDarkMode && { color: '#fff' }]}>Task date</Text>
                         <Pressable onPress={() => setShowPicker(true)}>
                            <TextInput
                               style={styles.input}
@@ -117,7 +122,7 @@ const TodoForm = () => {
                            onConfirm={handleConfirm}
                            onCancel={() => setShowPicker(false)}
                         />
-                        <Text style={styles.nameLabel}>Task category</Text>
+                        <Text style={[styles.nameLabel,isDarkMode && { color: '#fff' }]}>Task category</Text>
                         <Dropdown
                            style={styles.input}
                            data={options}
@@ -132,7 +137,7 @@ const TodoForm = () => {
                               setCategory(item.value);
                            }}
                         />
-                        <Text style={styles.nameLabel}>Task description</Text>
+                        <Text style={[styles.nameLabel,isDarkMode && { color: '#fff' }]}>Task description</Text>
                         <TextInput
                            style={styles.textinput}
                            placeholder="Add task description ..."
