@@ -80,6 +80,20 @@ const TodoDetails = () => {
 
      
       const handleDelete = () => {
+        Alert.alert('Are you sure you want to delete this task?', '', [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'Delete',
+            onPress: () => DeleteTask(id),
+            style: 'destructive',
+          },
+        ]);
+       
+      };
+      const DeleteTask = (id:string) => {
         deleteTodo(id);
         navigation.navigate('HomeScreen' as never);
       };

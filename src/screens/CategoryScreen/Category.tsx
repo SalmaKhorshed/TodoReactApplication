@@ -4,7 +4,7 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Edit, PlusIcon, Trash } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import {  FlatList, Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {  Alert, FlatList, Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { RootStackParamList } from "../../../App";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import { Category, useCategoryStore } from "../../stores/categoryStore";
@@ -36,7 +36,17 @@ const CategoryScreen = () => {
     }, [categories, searchQuery]);
 
     const handleDelete = (category: Category) => {
-      deleteCategory(category);
+      Alert.alert('Are you sure you want to delete this category?', '', [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => deleteCategory(category),
+          style: 'destructive',
+        },
+      ]);
     };
     const handleEdit = (id:string) => {
       navigation.navigate('CategoryEdit' as never, { id } );
