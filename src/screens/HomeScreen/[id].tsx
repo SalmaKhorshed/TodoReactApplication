@@ -126,6 +126,7 @@ const TodoDetails = () => {
         setIsEditMode(false);
         setTitleError('');
         setCategoryError('');
+        Alert.alert('Task updated successfully');
       };
 
 

@@ -46,6 +46,7 @@ const CategoryEdit = () => {
     setName('');
     setTitleError('');
     navigation.navigate('CategoryScreen' as never);
+    Alert.alert('Category updated successfully');
  };
 
  const handleCancel = () => {
