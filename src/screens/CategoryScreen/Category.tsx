@@ -133,7 +133,7 @@ const CategoryScreen = () => {
 };
 const styles = StyleSheet.create({
    keyboardAvoidingView: {
-      flex: 1,
+     
       //backgroundColor:'#fff',
    },
    backgroundImage:{

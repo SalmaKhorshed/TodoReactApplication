@@ -91,6 +91,7 @@ const HomeScreen = () => {
          <View style={styles.taskContainer}>
             {filteredTodos.length > 0 ? (
                 <FlatList
+                style={{height: 300}}
                 data={filteredTodos}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
